@@ -129,7 +129,7 @@ jobs:
       - restore_cache:
           keys: [frontend-scan]
       # Your job code here
-       - run:
+      - run:
           name: Frontend scan
           command: |
              # Your code here
