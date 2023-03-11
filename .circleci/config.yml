@@ -78,7 +78,7 @@ jobs:
       # Checkout code from git
       - checkout
       # Restore from cache
-       - restore_cache:
+      - restore_cache:
           keys: [frontend-test]
       # Your job code here
       - run:
