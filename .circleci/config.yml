@@ -185,10 +185,10 @@ jobs:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
-  	          --template-file .circleci/files/backend.yml \
-              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-              --tags project=udapeople
+  	        --template-file .circleci/files/backend.yml \
+            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+            --tags project=udapeople
 
               
       - run:
@@ -196,10 +196,10 @@ jobs:
           command: |
 
             aws cloudformation deploy \
-  	          --template-file .circleci/files/frontend.yml \
-              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-              --tags project=udapeople
+  	        --template-file .circleci/files/frontend.yml \
+            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+            --tags project=udapeople
     
           
       - run:
@@ -212,8 +212,8 @@ jobs:
               cd .circleci/ansible
               cat inventory.txt
               aws ec2 describe-instances \
-                --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --output text --filter Name=tage:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text --filter Name=tage:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
               cat inventory.txt
 
               # export BACKEND_IP=${aws ec2 describe-instances \
