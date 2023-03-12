@@ -236,7 +236,6 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             
-
             # Your code here
 
               cd .circleci/ansible
