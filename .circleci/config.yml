@@ -274,7 +274,7 @@ jobs:
       # attach workspace
       - attach_workspace:  
           at: ~/
-      - install_ansible
+      -install_ansible
       - run:
           name: Configure server
           command: |
