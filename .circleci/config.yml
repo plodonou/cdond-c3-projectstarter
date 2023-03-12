@@ -2,15 +2,16 @@ version: 2.1
 
 commands:
   install_ansible:
-    description: install Ansible
+    description: Install Ansible
     steps:
      - run:
-        name: install Ansible
-        command: |
-          sudo apt update
-          sudo apt install software-properties-common -y
-          sudo add-apt-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible -y
+         name: Install Ansible
+         command: |
+           sudo apt update
+           sudo apt install software-properties-common -y
+           sudo add-apt-repository --yes --update ppa:ansible/ansible
+           sudo apt install ansible -y
+
 
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -280,6 +281,7 @@ jobs:
             # Your code here
             cd .circleci/ansible
             cat inventory.txt
+
             ansible-playbook -i inventory.txt configure-server.yml      
       # Here's where you will add some code to rollback on failure 
       - destroy-environment     
@@ -304,7 +306,7 @@ jobs:
             # Your code here
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-             curl --insecure https://kvdb.io/DbZoajknREbJduuQG2eHZs/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+             curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
            
      # Here's where you will add some code to rollback on failure   
