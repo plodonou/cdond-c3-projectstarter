@@ -273,7 +273,7 @@ jobs:
             - "db:8f:f9:28:8e:e7:26:3b:ba:5c:2d:d0:27:29:8b:a3"    
       # attach workspace
       - attach_workspace  
-          at: ~/
+         at: ~/
 
       - install_ansible
 
