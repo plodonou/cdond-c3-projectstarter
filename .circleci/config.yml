@@ -223,9 +223,6 @@ jobs:
           name: Install dependencies
           command: |
                yum install -y tar gzip   
-
-    
-     
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -236,8 +233,6 @@ jobs:
                   ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags \
                   project=udapeople
-
-     
       - run:
             name: Ensure front-end infrastructure exist
             command: |
@@ -325,35 +320,34 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_nodejs
-      - install_awscli
-      - install_ansible 
-
+     
       - add_ssh_keys:
           fingerprints:
             - "04:9a:cb:3e:cf:70:e2:6e:a0:21:b7:c5:1e:20:24:76"
       # attach workspace
       - attach_workspace:  
           at: ~/   
-     
+      - install_nodejs
+      - install_awscli
+      - install_ansible 
       - run:
           name: Get backend url
           command: |
             # your code here
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text
             )
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
-            echo API_URL = "http://${BACKEND_IP}:3030" >> frontend/.env
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
-            sudo npm install -g npm@latest
+            sudo npm install -g npm@6.14.11
             rm -rf node_modules
             npm install
             npm run build
