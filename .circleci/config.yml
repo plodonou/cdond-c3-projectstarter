@@ -351,7 +351,6 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
             cd frontend
             sudo npm install -g npm@latest
             rm -rf node_modules
@@ -369,6 +368,9 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - install_nodejs
+      - install_awscli
+      - install_ansible  
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints:
@@ -376,11 +378,7 @@ jobs:
       # attach workspace
       - attach_workspace:  
           at: ~/
-
-      - install_nodejs
-      - install_awscli
-      - install_ansible   
-
+          
       - run:
           name: Deploy backend
           command: |
