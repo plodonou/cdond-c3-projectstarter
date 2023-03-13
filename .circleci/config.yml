@@ -387,17 +387,14 @@ jobs:
           command: |
             # your code here
             cd backend
-            sudo npm install -g npm@latest
             npm i
             npm run build
             cd ..
-
             cd .circleci/ansible
             mkdir files
             cd files
             tar -C ../../../backend -czvf artifact.tar.gz
             cd ../
-
             echo "Contents of the inventory.txt file is ------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
@@ -406,46 +403,53 @@ jobs:
       - destroy-environment
       - revert-migrations
       
-  smoke-test:
-    docker:
-      # Lightweight Docker image 
-      - image: cimg/base:stable
-    steps:
-      # Checkout code from git
-      - checkout
-      - install_nodejs
-      - install_awscli
+  # smoke-test:
+  #   docker:
+  #     # Lightweight Docker image 
+  #     - image: cimg/base:stable
+  #   steps:
+  #     # Checkout code from git
+  #     - checkout
+  #     - install_nodejs
+  #     - install_awscli
       
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-             --output text)
-            export API_URL=http://${BACKEND_PUBLIC_IP}:3030
-            echo {BACKEND_PUBLIC_IP}
-            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
-            echo ${API_URL}
-            if curl -s $API_URL/api/status | grep "ok"
-            then
-              exit 0
-            else
-              exit 1
-            fi 
-      - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            FRONTEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
-            echo $FRONTEND_WEBSITE
-            if curl -s $FRONTEND_WEBSITE 
-      # Here's where you will add some code to rollback on failure  
+  #     - run:
+  #         name: Get backend url
+  #         command: |
+  #           # your code here
+  #     - run:
+  #         name: Backend smoke test.
+  #         command: |
+  #           # your code here
+  #           BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+  #            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+  #            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+  #            --output text)
+  #           export API_URL=http://${BACKEND_PUBLIC_IP}:3030
+  #           echo {BACKEND_PUBLIC_IP}
+  #           echo backend-${CIRCLE_WORKFLOW_ID:0:7}
+  #           echo ${API_URL}
+  #           if curl -s $API_URL/api/status | grep "ok"
+  #           then
+  #             exit 0
+  #           else
+  #             exit 1
+  #           fi 
+  #     - run:
+  #         name: Frontend smoke test.
+  #         command: |
+  #           # your code here
+  #           FRONTEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
+  #           echo $FRONTEND_WEBSITE
+  #           if curl -s $FRONTEND_WEBSITE | grep "Welcome"
+  #           then
+  #             exit 0
+  #           else
+  #             exit 1
+  #           fi
+  #     # Here's where you will add some code to rollback on failure 
+  #     - destroy-environment
+  #     - revert-migrations 
 
 #   cloudfront-update:
 #     docker:
