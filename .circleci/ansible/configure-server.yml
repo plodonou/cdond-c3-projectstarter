@@ -1,6 +1,6 @@
 - name: "configuration play." 
   hosts: web
-  user: ubuntu
+  user: userAdmin
   become: true
   become_method: sudo
   become_user: root  
